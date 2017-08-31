@@ -2,12 +2,13 @@
 #define GAMEAREA_H
 
 #include <QWidget>
-#include <QStandardItemModel>
 #include <QTableView>
+#include <QStandardItemModel>
 #include <QPushButton>
 #include <QButtonGroup>
 #include <QTextStream>
-#include <QSignalMapper>
+#include <QTime>
+#include <QTimer>
 
 #include "sudokubox.h"
 
@@ -26,17 +27,24 @@ public:
 private slots:
     void on_numberButton_clicked(int num, bool checked);
     void on_currentBox_changed(QModelIndex id);
+    void updateGameTime();
+
+    void on_pauseButton_clicked(bool checked);
 
 private:
     Ui::GameArea *ui;
     QButtonGroup *numberButtonGroup;
     QStandardItemModel *sudokuModel;
+    QStandardItemModel *pauseModel;
+
+    QDateTime *gameTime;
+    QTimer *timer;
+
 
     SudokuBox* getBoxByIndex(QModelIndex id);
 
     bool makeMarkOn(QModelIndex id, int number, bool marked);
     void freshNumberButtons(QModelIndex boxid);
-
 
 };
 

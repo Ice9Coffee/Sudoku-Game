@@ -60,6 +60,9 @@
          <property name="lineWidth">
           <number>2</number>
          </property>
+         <property name="digitCount">
+          <number>5</number>
+         </property>
         </widget>
        </item>
        <item>
@@ -78,6 +81,9 @@
          </property>
          <property name="text">
           <string>Pause</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
