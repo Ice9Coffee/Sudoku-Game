@@ -1,6 +1,5 @@
 ﻿#include "gamearea.h"
 #include "ui_gamearea.h"
-#include <QTableWidget>
 
 #define SUDOKU_BOX_SIZE (60)
 
@@ -25,8 +24,8 @@ GameArea::GameArea(QWidget *parent) :
 
     for(int i = 1; i <= 9; ++i){
         connect(numberButtonGroup->button(i),
-                static_cast<void (QAbstractButton:: *)(bool checked)>(&QAbstractButton::toggled),
-                this, [=](bool checked){on_numberButton_toggled(i, checked);});
+                static_cast<void (QAbstractButton:: *)(bool checked)>(&QAbstractButton::clicked),
+                this, [=](bool checked){on_numberButton_clicked(i, checked);});
     }
 
 
@@ -38,6 +37,13 @@ GameArea::GameArea(QWidget *parent) :
         ui->sudokuTable->setIndexWidget(id, new SudokuBox((i + j) % 9));
     }
 
+    connect(ui->sudokuTable->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+            this, SLOT(on_currentBox_changed(QModelIndex)));
+
+    //ui->sudokuTable->selectionModel()->currentChanged();
+
+
+
 }
 
 GameArea::~GameArea()
@@ -45,15 +51,37 @@ GameArea::~GameArea()
     delete ui;
 }
 
-void GameArea::on_numberButton_toggled(int num, bool checked) {
+void GameArea::on_numberButton_clicked(int num, bool checked) {
     QModelIndexList idlist = ui->sudokuTable->selectionModel()->selectedIndexes();
-    if(!idlist.empty()) makeMarkOn(idlist.at(0), num, checked);
+    if(!idlist.empty()) {
+        makeMarkOn(idlist.at(0), num, checked);
+    }
     else {
         //特殊情况：开局直接点数字时...
     }
 }
 
+void GameArea::on_currentBox_changed(QModelIndex id) {
+    SudokuBox *box = getBoxByIndex(id);
+    freshNumberButtons(box->getMarks());
+    if(!box->isEditable()){
+        int num = box->getNumber();
+        for(int i=1; i<=9; ++i) numberButtonGroup->button(i)->setEnabled(false);
+        numberButtonGroup->button(num)->setEnabled(true);
+    }
+    else for(int i=1; i<=9; ++i) numberButtonGroup->button(i)->setEnabled(true);
+
+}
+
+void GameArea::freshNumberButtons(markFlag f) {
+    for(int i = 1; i <= 9; ++i) numberButtonGroup->button(i)->setChecked( f[i] );
+}
+
+SudokuBox *GameArea::getBoxByIndex(QModelIndex id) {
+    return dynamic_cast<SudokuBox*>(ui->sudokuTable->indexWidget(id));
+}
+
 //......................
 void GameArea::makeMarkOn(QModelIndex id, int number, bool marked) {
-    dynamic_cast<SudokuBox*>(ui->sudokuTable->indexWidget(id))->setMark(number, marked);
+    getBoxByIndex(id)->setMark(number, marked);
 }

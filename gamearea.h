@@ -24,15 +24,19 @@ public:
     ~GameArea();
 
 private slots:
-   void on_numberButton_toggled(int num, bool checked);
-
+    void on_numberButton_clicked(int num, bool checked);
+    void on_currentBox_changed(QModelIndex id);
 
 private:
     Ui::GameArea *ui;
     QButtonGroup *numberButtonGroup;
     QStandardItemModel *sudokuModel;
 
+    SudokuBox* getBoxByIndex(QModelIndex id);
+
     void makeMarkOn(QModelIndex id, int number, bool marked);
+    void freshNumberButtons(markFlag f);
+
 
 };
 

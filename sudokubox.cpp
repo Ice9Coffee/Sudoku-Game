@@ -4,7 +4,6 @@
 SudokuBox::SudokuBox(int num, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::SudokuBox),
-    mark{false},
     sLabel(new QLabel* [10])
 {
     ui->setupUi(this);
@@ -22,6 +21,7 @@ SudokuBox::SudokuBox(int num, QWidget *parent) :
 
 
     //set the box...
+    mark.clean();
     editable = true;
     if(1 <= num && num <= 9) {
         setMark(num, true);
@@ -37,19 +37,16 @@ SudokuBox::~SudokuBox()
 }
 
 int SudokuBox::getNumber() const {return number;}
+markFlag SudokuBox::getMarks() const {return mark;}
 bool SudokuBox::isEditable() const {return editable;}
-
-int SudokuBox::countMarks() const {
-    int sum = 0;
-    for(int i = 1; i <= 9; ++i) sum += mark[i];
-    return sum;
-}
+int SudokuBox::countMarks() const {return mark.count();}
 
 //return isSuccessed
 bool SudokuBox::setMark(int n, bool marked) {
     if(!editable || mark[n] == marked) return false;
 
-    mark[n] = marked;
+    //mark[n] = marked;
+    mark.setflag(n, marked);
     emit markChanged(n);
     return true;
 }
