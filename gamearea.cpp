@@ -53,17 +53,21 @@ GameArea::~GameArea()
 
 void GameArea::on_numberButton_clicked(int num, bool checked) {
     QModelIndexList idlist = ui->sudokuTable->selectionModel()->selectedIndexes();
-    if(!idlist.empty()) {
-        makeMarkOn(idlist.at(0), num, checked);
-    }
-    else {
-        //特殊情况：开局直接点数字时...
-    }
+    if(idlist.empty()) return;
+    if(!makeMarkOn(idlist.at(0), num, checked)) //设置mark失败时，不改变numberButton.checked状态
+        numberButtonGroup->button(num)->setChecked(!checked);
 }
 
 void GameArea::on_currentBox_changed(QModelIndex id) {
-    SudokuBox *box = getBoxByIndex(id);
-    freshNumberButtons(box->getMarks());
+    freshNumberButtons(id);
+}
+
+void GameArea::freshNumberButtons(QModelIndex boxid) {
+    SudokuBox *box = getBoxByIndex(boxid);
+    markFlag f = box->getMarks();
+
+    for(int i = 1; i <= 9; ++i) numberButtonGroup->button(i)->setChecked( f[i] );
+
     if(!box->isEditable()){
         int num = box->getNumber();
         for(int i=1; i<=9; ++i) numberButtonGroup->button(i)->setEnabled(false);
@@ -73,15 +77,10 @@ void GameArea::on_currentBox_changed(QModelIndex id) {
 
 }
 
-void GameArea::freshNumberButtons(markFlag f) {
-    for(int i = 1; i <= 9; ++i) numberButtonGroup->button(i)->setChecked( f[i] );
-}
-
 SudokuBox *GameArea::getBoxByIndex(QModelIndex id) {
     return dynamic_cast<SudokuBox*>(ui->sudokuTable->indexWidget(id));
 }
 
-//......................
-void GameArea::makeMarkOn(QModelIndex id, int number, bool marked) {
-    getBoxByIndex(id)->setMark(number, marked);
+bool GameArea::makeMarkOn(QModelIndex id, int number, bool marked) {
+    return getBoxByIndex(id)->setMark(number, marked);
 }

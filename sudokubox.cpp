@@ -1,6 +1,8 @@
 ﻿#include "sudokubox.h"
 #include "ui_sudokubox.h"
 
+#include <QDebug>
+
 SudokuBox::SudokuBox(int num, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::SudokuBox),
@@ -8,7 +10,7 @@ SudokuBox::SudokuBox(int num, QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(this, SIGNAL(numberChanged(int)), SLOT(on_numberChanged(int)));
+    connect(this, SIGNAL(numberChanged()), SLOT(on_numberChanged()));
     connect(this, SIGNAL(markChanged(int)), SLOT(on_markChanged(int)));
 
     sLabel[0] = nullptr;
@@ -45,25 +47,27 @@ int SudokuBox::countMarks() const {return mark.count();}
 bool SudokuBox::setMark(int n, bool marked) {
     if(!editable || mark[n] == marked) return false;
 
-    //mark[n] = marked;
     mark.setflag(n, marked);
+    qDebug() << this
+             << QString(": mark %0 changed to %1. Now markflag=%2")
+                .arg(n).arg(marked?"true":"false").arg(mark.rawHash());
     emit markChanged(n);
     return true;
 }
 
 void SudokuBox::fillNumber(int n) {
     if(number == n) return;
-    //this two lines shouldn't be abled in the final version.
-    //clearMarks();
-    //setMark(n, true);
+
     number = n;
-    emit numberChanged(n);
+    qDebug() << this << ": fill " << n;
+    emit numberChanged();
 }
 
 void SudokuBox::clearNumber() {
     if(number == 0) return;
     number = 0;
-    emit numberChanged(0);
+    qDebug() << this << ": number cleared.";
+    emit numberChanged();
 }
 
 void SudokuBox::clearMarks() {
@@ -71,12 +75,12 @@ void SudokuBox::clearMarks() {
 }
 
 
-void SudokuBox::on_numberChanged(int n) {
-    if(n == 0) {
+void SudokuBox::on_numberChanged() {
+    if(number == 0) {
         ui->mLabel->hide();
         return;
     }
-    ui->mLabel->setText(QString::number(n));
+    ui->mLabel->setText(QString::number(number));
     ui->mLabel->setVisible(true);
 }
 

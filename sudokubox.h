@@ -6,13 +6,18 @@
 
 struct markFlag {
     bool operator[](int n) const { return (flags >> n) & 1; }
-    void setflag(int n, bool checked) { checked ? flags |= 1 << n : flags &= ~(1 << n); }
-    void clean() { flags = 0; }
     int count() const {
         int sum = 0, f = flags;
         for(sum = f & 1; f >>= 1; sum += f & 1);
         return sum;
     }
+
+    //for debug.
+    int rawHash() const {return flags;}
+
+    void setflag(int n, bool checked) { checked ? flags |= 1 << n : flags &= ~(1 << n); }
+    void clean() { flags = 0; }
+
 private:
     int flags = 0;
 };
@@ -39,11 +44,11 @@ public slots:
     bool setMark(int n, bool marked);
 
 signals:
-    void numberChanged(int n);
+    void numberChanged();
     void markChanged(int n);
 
 private slots:
-    void on_numberChanged(int n);
+    void on_numberChanged();
     void on_markChanged(int n);
 
 private:

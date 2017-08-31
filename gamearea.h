@@ -34,8 +34,8 @@ private:
 
     SudokuBox* getBoxByIndex(QModelIndex id);
 
-    void makeMarkOn(QModelIndex id, int number, bool marked);
-    void freshNumberButtons(markFlag f);
+    bool makeMarkOn(QModelIndex id, int number, bool marked);
+    void freshNumberButtons(QModelIndex boxid);
 
 
 };
