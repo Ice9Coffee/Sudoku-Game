@@ -27,12 +27,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp\
         gamewindow.cpp \
     gamearea.cpp \
-    sudokubox.cpp
+    sudokubox.cpp \
+    sudokucommand.cpp
 
 HEADERS  += gamewindow.h \
     gamearea.h \
-    sudokubox.h
+    sudokubox.h \
+    sudokucommand.h
 
 FORMS    += gamewindow.ui \
     gamearea.ui \
     sudokubox.ui
+
+RESOURCES += \
+    sudokuresource.qrc

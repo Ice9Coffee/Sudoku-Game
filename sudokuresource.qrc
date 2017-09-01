@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/pic">
+        <file alias="pausePic">pictures/Chino.jpg</file>
+    </qresource>
+    <qresource prefix="/SE"/>
+    <qresource prefix="/stylesheet">
+        <file alias="dark">stylesheet/dark.css</file>
+    </qresource>
+</RCC>

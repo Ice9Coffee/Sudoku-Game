@@ -196,5 +196,6 @@ void GameArea::on_redoButton_clicked() {
 
 void GameArea::on_clearButton_clicked() {
     SudokuBox* box = getSelectedBox();
+    if(box == nullptr) return;
     box->setMarkFlag(markFlag());
 }

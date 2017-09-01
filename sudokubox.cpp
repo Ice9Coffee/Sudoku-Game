@@ -11,7 +11,7 @@ SudokuBox::SudokuBox(int num, QWidget *parent) :
     ui->setupUi(this);
 
     connect(this, SIGNAL(numberChanged()), SLOT(on_numberChanged()));
-    connect(this, SIGNAL(markChanged(int)), SLOT(on_markChanged(int)));
+    connect(this, SIGNAL(markChanged()), SLOT(on_markChanged()));
 
     sLabel[0] = nullptr;
     sLabel[1] = ui->sLabel1; sLabel[2] = ui->sLabel2; sLabel[3] = ui->sLabel3;
@@ -51,7 +51,16 @@ bool SudokuBox::setMark(int n, bool marked) {
     qDebug() << this
              << QString(": mark %0 changed to %1. Now markflag=%2")
                 .arg(n).arg(marked?"true":"false").arg(mark.rawHash());
-    emit markChanged(n);
+    emit markChanged();
+    return true;
+}
+
+bool SudokuBox::setMarkFlag(markFlag f) {
+    if(mark == f) return false;
+    mark = f;
+    qDebug() << this
+             << QString(": markflag changed to %0.").arg(mark.rawHash());
+    emit markChanged();
     return true;
 }
 
@@ -84,25 +93,42 @@ void SudokuBox::on_numberChanged() {
     ui->mLabel->setVisible(true);
 }
 
-void SudokuBox::on_markChanged(int n) {
+void SudokuBox::on_markChanged() {
     int amount = countMarks();
-    bool isMore = mark[n];
 
     if(amount > 1) {
-        if (amount == 2 && isMore) {
-            clearNumber();
-            for(int i=1; i<=9; ++i) sLabel[i]->setVisible(mark[i]);
-        }
-        else sLabel[n]->setVisible(mark[n]);
+        clearNumber();
+        for (int i = 1; i <= 9; ++i) sLabel[i]->setVisible(mark[i]);
     }
     else if (amount == 1) {
         int num=0;
         while(!mark[++num]);
         fillNumber(num);
-        if(!isMore) for(int i=1; i<=9; ++i) sLabel[i]->setVisible(false);
+        for (int i = 1; i <= 9; ++i) sLabel[i]->setVisible(false);
     }
-    else { //markAmount == 0
+    else {
         clearNumber();
+        for (int i = 1; i <= 9; ++i) sLabel[i]->setVisible(false);
     }
+
+
+//    bool isMore = mark[n];
+
+//    if(amount > 1) {
+//        if (amount == 2 && isMore) {
+//            clearNumber();
+//            for(int i=1; i<=9; ++i) sLabel[i]->setVisible(mark[i]);
+//        }
+//        else sLabel[n]->setVisible(mark[n]);
+//    }
+//    else if (amount == 1) {
+//        int num=0;
+//        while(!mark[++num]);
+//        fillNumber(num);
+//        if(!isMore) for(int i=1; i<=9; ++i) sLabel[i]->setVisible(false);
+//    }
+//    else { //markAmount == 0
+//        clearNumber();
+//    }
 }
 

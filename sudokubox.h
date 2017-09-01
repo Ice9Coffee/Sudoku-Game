@@ -6,6 +6,7 @@
 
 struct markFlag {
     bool operator[](int n) const { return (flags >> n) & 1; }
+    bool operator==(const markFlag& other) const {return flags == other.rawHash();}
     int count() const {
         int sum = 0, f = flags;
         for(sum = f & 1; f >>= 1; sum += f & 1);
@@ -42,14 +43,15 @@ public:
 
 public slots:
     bool setMark(int n, bool marked);
+    bool setMarkFlag(markFlag f);
 
 signals:
     void numberChanged();
-    void markChanged(int n);
+    void markChanged();
 
 private slots:
     void on_numberChanged();
-    void on_markChanged(int n);
+    void on_markChanged();
 
 private:
     Ui::SudokuBox *ui;
