@@ -56,7 +56,7 @@ bool SudokuBox::setMark(int n, bool marked) {
 }
 
 bool SudokuBox::setMarkFlag(markFlag f) {
-    if(mark == f) return false;
+    if(!editable || mark == f) return false;
     mark = f;
     qDebug() << this
              << QString(": markflag changed to %0.").arg(mark.rawHash());
@@ -79,10 +79,9 @@ void SudokuBox::clearNumber() {
     emit numberChanged();
 }
 
-void SudokuBox::clearMarks() {
-    for(int i = 1; i <= 9; ++i) setMark(i, false);
+bool SudokuBox::clearMarks() {
+    return setMarkFlag(markFlag());
 }
-
 
 void SudokuBox::on_numberChanged() {
     if(number == 0) {

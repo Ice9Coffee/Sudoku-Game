@@ -32,8 +32,9 @@ public:
 
 private slots:
     void on_numberButton_clicked(int num, bool checked);
-    void on_currentBox_changed(QModelIndex id);
+    void on_currentBox_changed(QModelIndex current, QModelIndex previous);
     void updateGameTime();
+    void setStyle(QModelIndex current, QModelIndex previous);
 
     void on_pauseButton_clicked(bool checked);
     void on_undoButton_clicked();
@@ -52,14 +53,19 @@ private:
     QUndoStack *undoStack;
     QAction *undoAction, *redoAction;
 
-    SudokuBox* getBoxByIndex(QModelIndex id);
+    QString normalBoxStyle, highlightBoxStyle, selectedBoxStyle;
+
+    SudokuBox* getBox(QModelIndex id);
     SudokuBox* getSelectedBox();
 
 
     bool makeMarkOn(SudokuBox* box, int number, bool marked);
     bool setMarkOn(SudokuBox* box, markFlag f);
+    bool clearMark(SudokuBox* box);
+
     void freshNumberButtons(SudokuBox* box);
     void freshUndoRedoButtons();
+    void freshClearButton(SudokuBox *box);
     void setGameAreaActive(bool active);
 
 };

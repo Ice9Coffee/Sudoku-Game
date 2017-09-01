@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
     GameWindow w;
     w.show();
 
-    /*
+/*
     QString styleSheet;
     auto* qssFile = new QFile(":/stylesheet/dark");
     if(qssFile->open(QFile::ReadOnly)) {
@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
         qApp->setStyleSheet(styleSheet);
         qssFile->close();
     }
-    */
+*/
 
 
     return a.exec();

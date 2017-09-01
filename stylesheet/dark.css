@@ -5,6 +5,8 @@ QLabel, QRadioButton {
     color: #FFFFFF;
 }
 
+
+
 QLineEdit, QTextEdit, QDateEdit {
     background: #2A2A2A;
     color: #DDDDDD;
@@ -124,7 +126,7 @@ QComboBox::down-arrow {
 QComboBox::down-arrow:on {
     top: 1px; left: 1px;
 }
-QComboBox, QAbstractItemView::item {
+QComboBox QAbstractItemView::item {
     max-width: 40px;
     min-height: 20px;
 }

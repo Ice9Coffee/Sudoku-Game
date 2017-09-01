@@ -44,6 +44,7 @@ public:
 public slots:
     bool setMark(int n, bool marked);
     bool setMarkFlag(markFlag f);
+    bool clearMarks();
 
 signals:
     void numberChanged();
@@ -61,12 +62,8 @@ private:
 
     QLabel** sLabel;
 
-
     void fillNumber(int n);
     void clearNumber();
-
-
-    void clearMarks();
 
 };
 

@@ -19,13 +19,16 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QLabel" name="mLabel">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>60</width>
-     <height>60</height>
+     <x>2</x>
+     <y>2</y>
+     <width>56</width>
+     <height>56</height>
     </rect>
    </property>
    <property name="font">
@@ -33,6 +36,9 @@
      <family>方正喵呜体</family>
      <pointsize>22</pointsize>
     </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
    </property>
    <property name="text">
     <string>mLabel</string>
@@ -239,6 +245,45 @@
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
+  <widget class="QLabel" name="bg">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>60</width>
+     <height>60</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>60</width>
+     <height>60</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <zorder>bg</zorder>
+  <zorder>sLabel1</zorder>
+  <zorder>sLabel2</zorder>
+  <zorder>sLabel3</zorder>
+  <zorder>sLabel4</zorder>
+  <zorder>sLabel5</zorder>
+  <zorder>sLabel6</zorder>
+  <zorder>sLabel7</zorder>
+  <zorder>sLabel8</zorder>
+  <zorder>sLabel9</zorder>
+  <zorder>mLabel</zorder>
  </widget>
  <resources/>
  <connections/>

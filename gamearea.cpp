@@ -2,6 +2,7 @@
 #include "ui_gamearea.h"
 
 #include <QDebug>
+#include <QFile>
 
 #define SUDOKU_BOX_SIZE (60)
 
@@ -33,16 +34,40 @@ GameArea::GameArea(QWidget *parent) :
                 this, [=](bool checked){on_numberButton_clicked(i, checked);});
     }
 
-
     //set table.
     ui->sudokuTable->setModel(sudokuModel = new QStandardItemModel(9, 9));
     connect(ui->sudokuTable->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-            this, SLOT(on_currentBox_changed(QModelIndex)));
+            this, SLOT(on_currentBox_changed(QModelIndex, QModelIndex)));
+
 
     //read question.....................
     for(int i = 0; i < 9; ++i) for(int j = 0; j < 9; ++j) {
         QModelIndex id = sudokuModel->index(i, j);
         ui->sudokuTable->setIndexWidget(id, new SudokuBox((i + j) % 9));
+    }
+
+    //setStyle....
+    ui->sudokuTable->setShowGrid(false);
+    QFile* qssFile;
+
+    qssFile= new QFile(":/stylesheet/normalBox");
+    if(qssFile->open(QFile::ReadOnly)) normalBoxStyle = QString(qssFile->readAll());
+    qssFile->close();
+    delete qssFile;
+
+    qssFile= new QFile(":/stylesheet/highlightBox");
+    if(qssFile->open(QFile::ReadOnly)) highlightBoxStyle = QString(qssFile->readAll());
+    qssFile->close();
+    delete qssFile;
+
+    qssFile= new QFile(":/stylesheet/selectedBox");
+    if(qssFile->open(QFile::ReadOnly)) selectedBoxStyle = QString(qssFile->readAll());
+    qssFile->close();
+    delete qssFile;
+
+    for(int i = 0; i < 9; ++i) for(int j = 0; j < 9; ++j) {
+        QModelIndex id = sudokuModel->index(i, j);
+        getBox(id)->setStyleSheet(normalBoxStyle);
     }
 
     //set timer.
@@ -72,8 +97,10 @@ void GameArea::on_numberButton_clicked(int num, bool checked) {
     freshUndoRedoButtons();
 }
 
-void GameArea::on_currentBox_changed(QModelIndex id) {
-    freshNumberButtons(getBoxByIndex(id));
+void GameArea::on_currentBox_changed(QModelIndex current, QModelIndex previous) {
+    freshNumberButtons(getBox(current));
+    freshClearButton(getBox(current));
+    setStyle(current, previous);
 }
 
 void GameArea::freshNumberButtons(SudokuBox *box) {
@@ -96,14 +123,45 @@ void GameArea::freshUndoRedoButtons() {
     ui->redoButton->setEnabled(undoStack->canRedo());
 }
 
+void GameArea::freshClearButton(SudokuBox* box) {
+    if(box == nullptr) return;
+    ui->clearButton->setEnabled(box->isEditable());
+}
+
 void GameArea::setGameAreaActive(bool active) {
     ui->sudokuTable->setEnabled(active);
     for(int i = 1; i <= 9; ++i) numberButtonGroup->button(i)->setEnabled(active);
-    if(active) freshUndoRedoButtons();
+    if(active) {
+        freshUndoRedoButtons();
+        freshClearButton(getSelectedBox());
+    }
     else {
         ui->undoButton->setEnabled(false);
         ui->redoButton->setEnabled(false);
+        ui->clearButton->setEnabled(false);
     }
+}
+
+void GameArea::setStyle(QModelIndex current, QModelIndex previous) {
+    if(previous.isValid()){
+        for(int j = 0; j < 9; ++j)
+            getBox(sudokuModel->index(previous.row(), j))->setStyleSheet(normalBoxStyle);
+        for(int i = 0; i < 9; ++i)
+            getBox(sudokuModel->index(i, previous.column()))->setStyleSheet(normalBoxStyle);
+    }
+
+    if(current.isValid()) {
+        for(int j = 0; j < 9; ++j)
+            getBox(sudokuModel->index(current.row(), j))->setStyleSheet(highlightBoxStyle);
+        for(int i = 0; i < 9; ++i)
+            getBox(sudokuModel->index(i, current.column()))->setStyleSheet(highlightBoxStyle);
+    }
+    getBox(current)->setStyleSheet(selectedBoxStyle);
+
+    qDebug() << "setStyle at (" << current.row()+1 << "," << current.column() << ")";
+    qDebug() << "normal:\n" << normalBoxStyle;
+    qDebug() << "highlight:\n" << highlightBoxStyle;
+    qDebug() << "selected:\n" << selectedBoxStyle;
 }
 
 void GameArea::updateGameTime() {
@@ -123,14 +181,14 @@ void GameArea::updateGameTime() {
     qDebug() << QString("Game Time: %0").arg(lcdString);
 }
 
-SudokuBox *GameArea::getBoxByIndex(QModelIndex id) {
+SudokuBox *GameArea::getBox(QModelIndex id) {
     return dynamic_cast<SudokuBox*>(ui->sudokuTable->indexWidget(id));
 }
 
 SudokuBox *GameArea::getSelectedBox() {
     QModelIndexList idlist = ui->sudokuTable->selectionModel()->selectedIndexes();
     if(idlist.empty()) return nullptr;
-    else return getBoxByIndex(idlist.at(0));
+    else return getBox(idlist.at(0));
 }
 
 bool GameArea::makeMarkOn(SudokuBox *box, int number, bool marked) {
@@ -153,6 +211,10 @@ bool GameArea::setMarkOn(SudokuBox *box, markFlag f) {
     if(result) undoStack->push(new sudokuCommand(box, oldF, f));
 
     return result;
+}
+
+bool GameArea::clearMark(SudokuBox *box) {
+    return setMarkOn(box, markFlag());
 }
 
 void GameArea::on_pauseButton_clicked(bool checked) {
@@ -196,5 +258,9 @@ void GameArea::on_redoButton_clicked() {
 
 void GameArea::on_clearButton_clicked() {
     SudokuBox* box = getSelectedBox();
-    box->setMarkFlag(markFlag());
+    if(box == nullptr) return;
+    clearMark(box);
+
+    freshUndoRedoButtons();
+    freshNumberButtons(getSelectedBox());
 }
