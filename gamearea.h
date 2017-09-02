@@ -34,21 +34,23 @@ private slots:
     void on_numberButton_clicked(int num, bool checked);
     void on_currentBox_changed(QModelIndex current, QModelIndex previous);
     void updateGameTime();
-    void setStyle(QModelIndex current, QModelIndex previous);
 
     void on_pauseButton_clicked(bool checked);
     void on_undoButton_clicked();
     void on_redoButton_clicked();
     void on_clearButton_clicked();
-
     void on_hintButton_clicked();
+
+    void on_restartButton_clicked();
+
+    void on_commitButton_clicked();
 
 private:
     Ui::GameArea *ui;
     QButtonGroup *numberButtonGroup;
     QStandardItemModel *sudokuModel;
 
-    QString answer;
+    QString problem, answer;
     int hintUsed;
 
     QDateTime *gameTime;
@@ -72,6 +74,7 @@ private:
     void freshNumberButtons(SudokuBox* box);
     void freshUndoRedoButtons();
     void freshClearButton(SudokuBox *box);
+    void freshStyle(QModelIndex current, int curN, QModelIndex previous, int preN);
     void setGameAreaActive(bool active);
 
     void readQSS(QString* dest, QString srcFile);

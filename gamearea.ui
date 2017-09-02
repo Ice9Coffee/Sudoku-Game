@@ -98,16 +98,9 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="commitButton">
          <property name="text">
-          <string>PushButton</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_2">
-         <property name="text">
-          <string>PushButton</string>
+          <string>Check Answer</string>
          </property>
         </widget>
        </item>
