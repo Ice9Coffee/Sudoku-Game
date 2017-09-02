@@ -16,8 +16,6 @@
 #include "sudokubox.h"
 #include "sudokucommand.h"
 
-
-
 namespace Ui {
 class GameArea;
 }
@@ -30,6 +28,8 @@ public:
     explicit GameArea(QWidget *parent = 0);
     ~GameArea();
 
+    void loadProblem(const QString* p, const QString* a);
+
 private slots:
     void on_numberButton_clicked(int num, bool checked);
     void on_currentBox_changed(QModelIndex current, QModelIndex previous);
@@ -41,10 +41,15 @@ private slots:
     void on_redoButton_clicked();
     void on_clearButton_clicked();
 
+    void on_hintButton_clicked();
+
 private:
     Ui::GameArea *ui;
     QButtonGroup *numberButtonGroup;
     QStandardItemModel *sudokuModel;
+
+    QString answer;
+    int hintUsed;
 
     QDateTime *gameTime;
     QTimer *timer;
@@ -53,11 +58,12 @@ private:
     QUndoStack *undoStack;
     QAction *undoAction, *redoAction;
 
-    QString normalBoxStyle, highlightBoxStyle, selectedBoxStyle;
+    QString normalBoxStyle1, normalBoxStyle2,
+            highlightBoxStyle, selectedBoxStyle, sameNumBoxStyle,
+            editableTextStyle, uneditableTextStyle;
 
     SudokuBox* getBox(QModelIndex id);
     SudokuBox* getSelectedBox();
-
 
     bool makeMarkOn(SudokuBox* box, int number, bool marked);
     bool setMarkOn(SudokuBox* box, markFlag f);
@@ -68,6 +74,7 @@ private:
     void freshClearButton(SudokuBox *box);
     void setGameAreaActive(bool active);
 
+    void readQSS(QString* dest, QString srcFile);
 };
 
 #endif // GAMEAREA_H

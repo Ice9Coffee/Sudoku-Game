@@ -1,9 +1,0 @@
-﻿QLabel {
-    color:#CCCCCC;
-    background-color:rgba(0,0,0,0);
-}
-
-QLabel#bg {
-    background-color:black;
-    border: 1px solid rgb(48, 48, 48);
-}

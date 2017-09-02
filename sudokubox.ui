@@ -19,16 +19,13 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true"/>
-  </property>
   <widget class="QLabel" name="mLabel">
    <property name="geometry">
     <rect>
-     <x>2</x>
-     <y>2</y>
-     <width>56</width>
-     <height>56</height>
+     <x>0</x>
+     <y>0</y>
+     <width>60</width>
+     <height>60</height>
     </rect>
    </property>
    <property name="font">
@@ -36,9 +33,6 @@
      <family>方正喵呜体</family>
      <pointsize>22</pointsize>
     </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
    </property>
    <property name="text">
     <string>mLabel</string>
@@ -262,12 +256,9 @@
    </property>
    <property name="minimumSize">
     <size>
-     <width>60</width>
-     <height>60</height>
+     <width>0</width>
+     <height>0</height>
     </size>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
    </property>
    <property name="text">
     <string/>

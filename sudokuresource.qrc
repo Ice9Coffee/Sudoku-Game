@@ -5,8 +5,12 @@
     <qresource prefix="/SE"/>
     <qresource prefix="/stylesheet">
         <file alias="dark">stylesheet/dark.css</file>
-        <file alias="normalBox">stylesheet/normalBox.css</file>
+        <file alias="normalBox1">stylesheet/normalBox1.css</file>
         <file alias="highlightBox">stylesheet/highlightBox.css</file>
         <file alias="selectedBox">stylesheet/selectedBox.css</file>
+        <file alias="normalBox2">stylesheet/normalBox2.css</file>
+        <file alias="editableText">stylesheet/editableText.css</file>
+        <file alias="uneditableText">stylesheet/uneditableText.css</file>
+        <file alias="sameNumBox">stylesheet/sameNumBox.css</file>
     </qresource>
 </RCC>
