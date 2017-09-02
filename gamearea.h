@@ -40,9 +40,7 @@ private slots:
     void on_redoButton_clicked();
     void on_clearButton_clicked();
     void on_hintButton_clicked();
-
     void on_restartButton_clicked();
-
     void on_commitButton_clicked();
 
 private:
@@ -65,7 +63,7 @@ private:
             editableTextStyle, uneditableTextStyle;
 
     SudokuBox* getBox(QModelIndex id);
-    SudokuBox* getSelectedBox();
+    SudokuBox* getCurrentBox();
 
     bool makeMarkOn(SudokuBox* box, int number, bool marked);
     bool setMarkOn(SudokuBox* box, markFlag f);
