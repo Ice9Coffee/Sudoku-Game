@@ -34,7 +34,6 @@ public:
 
     void loadProblem(const QString* p, const QString* a);
 
-public:
     void keyPressEvent(QKeyEvent *e);
 
 private slots:

@@ -146,6 +146,9 @@ void GameArea::keyPressEvent(QKeyEvent *e) {
     case Qt::Key_H:
         ui->hintButton->click();
         break;
+    case Qt::Key_P:
+        ui.pauseButton.click();
+        break;
     case Qt::Key_F2:
         ui->restartButton->click();
         break;
@@ -172,6 +175,12 @@ void GameArea::keyPressEvent(QKeyEvent *e) {
         if(curId.column() + 1 >= 9) break;
         newId = sudokuModel->index(curId.row(), curId.column() + 1);
         ui->sudokuTable->selectionModel()->setCurrentIndex(newId, QItemSelectionModel::Current);
+        break;
+    case Qt::Key_Z:
+        ui->undoButton->click();
+        break;
+    case Qt::Key_X:
+        ui->redoButton->click();
         break;
     default:
         QWidget::keyPressEvent(e);
@@ -385,16 +394,23 @@ void GameArea::on_pauseButton_clicked(bool checked) {
 void GameArea::on_undoButton_clicked() {
     undoAction->trigger();
 
+    QModelIndex id = ui->sudokuTable->currentIndex();
+    SudokuBox* box = getCurrentBox();
+    int preN = box->getNumber();
     freshUndoRedoButtons();
-    freshNumberButtons(getCurrentBox());
+    freshNumberButtons(box);
+    freshStyle(id, box->getNumber(), id, preN);
 }
 
 void GameArea::on_redoButton_clicked() {
     redoAction->trigger();
 
+    QModelIndex id = ui->sudokuTable->currentIndex();
+    SudokuBox* box = getCurrentBox();
+    int preN = box->getNumber();
     freshUndoRedoButtons();
     freshNumberButtons(getCurrentBox());
-
+    freshStyle(id, box->getNumber(), id, preN);
 }
 
 void GameArea::on_clearButton_clicked() {
