@@ -13,4 +13,7 @@
         <file alias="uneditableText">stylesheet/uneditableText.css</file>
         <file alias="sameNumBox">stylesheet/sameNumBox.css</file>
     </qresource>
+    <qresource prefix="/puzzles">
+        <file alias="default">data/puzzles.txt</file>
+    </qresource>
 </RCC>

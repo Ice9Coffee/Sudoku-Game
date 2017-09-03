@@ -43,11 +43,6 @@ GameArea::GameArea(QWidget *parent) :
     connect(ui->sudokuTable->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
             this, SLOT(on_currentBox_changed(QModelIndex, QModelIndex)));
 
-    for(int i = 0; i < 9; ++i) for(int j = 0; j < 9; ++j) {
-        QModelIndex id = sudokuModel->index(i, j);
-        ui->sudokuTable->setIndexWidget(id, new SudokuBox((i+j)%9));
-    }
-
     //set timer.
     timer = new QTimer(this);
     timer->start(1000);
@@ -73,9 +68,9 @@ GameArea::GameArea(QWidget *parent) :
     readQSS(&uneditableTextStyle, ":/stylesheet/uneditableText");
 
     //read q
-    loadProblem(new QString("643000500071032046820641090089300054300829610010470008090000100002000400167954080"),
-                new QString("643798521971532846825641793789316254354829617216475938498263175532187469167954382"));
-
+    loadProblem(new QString("000000000000000000000000000000000000000000000000000000000000000000000000000000000"),
+                new QString("000000000000000000000000000000000000000000000000000000000000000000000000000000000"));
+    setGameAreaActive(false);
 }
 
 GameArea::~GameArea()
@@ -91,6 +86,11 @@ void GameArea::loadProblem(const QString *p, const QString *a) {
         int num = (*p)[9 * i + j].toLatin1() - '0';
         ui->sudokuTable->setIndexWidget(id, new SudokuBox(num));
     }
+
+    gameTime = new QDateTime(startDate, QTime(0, 0, 0));
+    undoStack->clear();
+    setGameAreaActive(true);
+    ui->pauseButton->setEnabled(true);
 
     //fresh style
     for(int i = 0; i < 9; ++i) for(int j = 0; j < 9; ++j) {
@@ -128,15 +128,21 @@ void GameArea::freshClearButton(SudokuBox* box) {
 void GameArea::setGameAreaActive(bool active) {
     ui->sudokuTable->setEnabled(active);
     ui->hintButton->setEnabled(active);
-    for(int i = 1; i <= 9; ++i) numberButtonGroup->button(i)->setEnabled(active);
+    ui->commitButton->setEnabled(active);
+    ui->restartButton->setEnabled(active);
+    ui->pauseButton->setEnabled(active);
     if(active) {
+        timer->start();
         freshUndoRedoButtons();
         freshClearButton(getCurrentBox());
+        freshNumberButtons(getCurrentBox());
     }
     else {
+        timer->stop();
         ui->undoButton->setEnabled(false);
         ui->redoButton->setEnabled(false);
         ui->clearButton->setEnabled(false);
+        for(int i = 1; i <= 9; ++i) numberButtonGroup->button(i)->setEnabled(false);
     }
 }
 
@@ -275,8 +281,8 @@ void GameArea::on_currentBox_changed(QModelIndex current, QModelIndex previous) 
 
 void GameArea::on_pauseButton_clicked(bool checked) {
     if(checked){
-        timer->stop();
         setGameAreaActive(false);
+        ui->pauseButton->setEnabled(true);
 
         //遮挡棋盘.
         ui->sudokuTable->setVisible(false);
@@ -284,8 +290,8 @@ void GameArea::on_pauseButton_clicked(bool checked) {
 
 
     } else {
-        timer->start();
         setGameAreaActive(true);
+        ui->pauseButton->setEnabled(true);
 
         //防止pause连打.
         ui->pauseButton->setEnabled(false);
@@ -342,19 +348,12 @@ void GameArea::on_hintButton_clicked() {
         freshUndoRedoButtons();
         freshClearButton(box);
         freshNumberButtons(box);
-    }
+    } else QMessageBox::warning(this, "Sudoku-Game", "You are right in this box!", QMessageBox::Ok);
 }
 
 void GameArea::on_restartButton_clicked() {
     int re = QMessageBox::warning(this, "Sudoku-Game", "Are you sure to RESTART?", QMessageBox::Yes | QMessageBox::No);
     if(re == QMessageBox::Yes) {
-        gameTime = new QDateTime(startDate, QTime(0, 0, 0));
-        undoStack->clear();
-        freshClearButton(nullptr);
-        freshNumberButtons(nullptr);
-        freshUndoRedoButtons();
-        ui->commitButton->setEnabled(true);
-        ui->pauseButton->setEnabled(true);
         loadProblem(&problem, &answer);
     }
 }
