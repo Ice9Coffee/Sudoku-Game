@@ -1,11 +1,14 @@
 # Sudoku-Game
 Project-Week1 in Summer 2017
 
+*所用音效、音乐、图片素材均来源于网络，版权归原作者所有，侵删。*
+
 ## 基本功能实现
+
  - 9x9布局 可响应鼠标点击
  - 点击选中方格可对选中方格填数，通过选中数字按钮进行填数。[可用键盘填数]()
  - 重玩、暂停，暂停时计时停止，方格不可选中。 [暂停时显示暂停画面遮挡题目]()
- - 关卡选择 11个预制关卡 [待实现：还可随机生成题目]()
+ - 关卡选择 11个预制关卡 [还可随机生成题目]()
  - 撤销、恢复功能 [支持步数无限制]()
  - 清除功能
  - 相同数字高亮
@@ -13,23 +16,26 @@ Project-Week1 in Summer 2017
  - 点击Check Answer按钮可检查答案、并判断游戏结束。
 
 ## 特色功能拓展
- - [待实现：数独生成器]()
- - 为功能按钮设置了Short Cut供使用
- - 可通过键盘填数、可通过方向键在网格内导航
- - 显示暂停画面遮挡题目
- - SE & BGM
- - 撤销删除操作支持步数无限制！
- - 求助按钮 可提示选中的格子应填入的数字（填错的数字可通过Check Answer按钮检查）
+
+ - [数独生成器]()
+ - 为功能按钮设置了**Shortcut**供使用
+ - 可通过键盘**数字键**填数、可通过**方向键**在网格内导航
+ - 显示**暂停画面**遮挡题目
+ - **SE & BGM**（音效与背景音乐）
+ - 撤销删除操作支持步数**无限制！**
+ - **求助按钮** 可提示选中的格子应填入的数字（填错的数字可通过Check Answer按钮检查）
 
 
 
 ## 实现时用到的黑科技
+
  - λ表达式：连接多组信号槽，方便地解决信号槽参数个数不匹配的问题。
- `````
+ ```
  connect(numberButtonGroup->button(i),
         static_cast<void (QAbstractButton:: *)(bool checked)>(&QAbstractButton::clicked),
         this, [=](bool checked) { on_numberButton_clicked(i, checked); });
- `````
+ ```
+
  - QSS：设置背景颜色、高亮颜色等。
  - 新开线程使BGM播放平稳...............................未成功？
 
@@ -60,7 +66,7 @@ Project-Week1 in Summer 2017
 #### 主要函数
 
 | Function Name | Detail |
-| ---- | ---- |
+| :---- | :---- |
 | bool [makeMarkOn]()(SudokuBox* box, int number, bool marked); | 在box上对number设置/清除标记。 |
 | bool [setMarkOn]()(SudokuBox* box, markFlag f); | 将box的标记改为f。 |
 | bool [clearMark]()(SudokuBox* box); | 清除box中的标记。 |
@@ -73,8 +79,8 @@ Project-Week1 in Summer 2017
 
 #### Buttons
 
-| Button(Group) Name | Button Function | Short Cut
-| ---- | ---- | ---- |
+| Button(Group) Name | Button Function | Shortcut
+| :---- | :---- | ----: |
 | numberButtonGroup | 填入/清除相应数字 | 1 ~ 9 |
 | clearButton | 清除当前格子内所有标记 (若可编辑) | 0 and C |
 | undoButton | 撤销 (可撤销步数无限制) | Z |
@@ -82,14 +88,14 @@ Project-Week1 in Summer 2017
 | hintButton | 可给出选定格子的正确答案 | H |
 | pauseButton | 暂停 (会遮挡题目) | P |
 | restartButton | 重新开始游戏 | F2 |
-| commitButton | 检查是否完成、是否正确解决了题目 | (No Short Cut) |
+| commitButton | 检查是否完成、是否正确解决了题目 | (No Shortcut) |
 
 #### 关于游戏时间记录 与 暂停功能
 
 暂停时会将游戏区域禁用、暂停计时，并遮挡游戏画面。
 
 | 控件 | Function |
-| ---- | ---- |
+| :---- | :---- |
 | timeLCD | 显示时间。 |
 | QDateTime* gameTime | 记录时间。 |
 | QTimer *timer | 每秒触发timeout()，更新时间。 |
@@ -105,14 +111,14 @@ Project-Week1 in Summer 2017
 
 #### Properties
 | Property Name | Detail |
-| ---- | ---- |
+| :---- | :---- |
 | int number | 填入的数字（0表示空） |
 | markFlag mark | 该格的标记状态 |
 | bool editable | 该格是否可编辑 |
 
 #### Public Functions
 | Function Name | Detail |
-| ---- | ---- |
+| :---- | :---- |
 | int [getNumber]()() const; | return number. |
 | markFlag [getMarks]()() const; | return mark. |
 | bool [isEditable]()() const; | return editable. |
@@ -123,12 +129,12 @@ Project-Week1 in Summer 2017
 
 #### Signals
 | Signal Name | Detail |
-| ---- | ---- |
+| :---- | :---- |
 | void [numberChanged]()(); | emit when number changed. |
 | void [markChanged]()(); | emit when mark changed. |
 
 #### Private Slots
 | Slot Name | Detail |
-| ---- | ---- |
+| :---- | :---- |
 | void [on_numberChanged]()(); | 更新mLabel的状态 |
 | void [on_numberChanged]()(); | 更新sLabels的状态 |

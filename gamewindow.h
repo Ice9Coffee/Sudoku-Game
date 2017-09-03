@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include "sudokugenerator.h"
+
 namespace Ui {
 class GameWindow;
 }
@@ -17,10 +19,12 @@ public:
 
 private slots:
     void loadPuzzle(int lv);
+    void loadRandomPuzzle();
 
 private:
     Ui::GameWindow *ui;
     QString *p[11], *a[11];
+    SudokuGenerator sdkGen;
 };
 
 #endif // GAMEWINDOW_H

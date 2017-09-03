@@ -147,7 +147,7 @@ void GameArea::keyPressEvent(QKeyEvent *e) {
         ui->hintButton->click();
         break;
     case Qt::Key_P:
-        ui.pauseButton.click();
+        ui->pauseButton->click();
         break;
     case Qt::Key_F2:
         ui->restartButton->click();

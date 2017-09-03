@@ -7,6 +7,7 @@
 
 #include <QDebug>
 
+#define MAGIC (233)
 
 GameWindow::GameWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -37,7 +38,7 @@ GameWindow::GameWindow(QWidget *parent) :
     connect(ui->actionLv_8,  &QAction::triggered, this, [=]{ loadPuzzle(8); });
     connect(ui->actionLv_9,  &QAction::triggered, this, [=]{ loadPuzzle(9); });
     connect(ui->actionLv_10, &QAction::triggered, this, [=]{ loadPuzzle(10);});
-
+    connect(ui->actionRandom, &QAction::triggered, this, &GameWindow::loadRandomPuzzle);
 }
 
 GameWindow::~GameWindow()
@@ -48,4 +49,14 @@ GameWindow::~GameWindow()
 void GameWindow::loadPuzzle(int lv) {
     int re = QMessageBox::warning(this, "Sudoku-Game", "Are you sure to load a new game?", QMessageBox::Yes | QMessageBox::No);
     if(re == QMessageBox::Yes) ui->gameArea->loadProblem(p[lv], a[lv]);
+}
+
+void GameWindow::loadRandomPuzzle() {
+    int re = QMessageBox::warning(this, "Sudoku-Game", "Are you sure to load a random game?", QMessageBox::Yes | QMessageBox::No);
+    if(re != QMessageBox::Yes) return;
+    int blanks = 30 + (60 - 30) * 1.0f * qrand() / RAND_MAX;
+    sdkGen.gen(MAGIC, blanks);
+    auto *rp = new QString(sdkGen.puzzle());
+    auto *ra = new QString(sdkGen.answer());
+    ui->gameArea->loadProblem(rp, ra);
 }

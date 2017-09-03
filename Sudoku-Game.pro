@@ -31,14 +31,16 @@ SOURCES += main.cpp\
     sudokubox.cpp \
     sudokucommand.cpp \
     sudokutable.cpp \
-    bgmthread.cpp
+    bgmthread.cpp \
+    sudokugenerator.cpp
 
 HEADERS  += gamewindow.h \
     gamearea.h \
     sudokubox.h \
     sudokucommand.h \
     sudokutable.h \
-    bgmthread.h
+    bgmthread.h \
+    sudokugenerator.h
 
 FORMS    += gamewindow.ui \
     gamearea.ui \
