@@ -5,11 +5,11 @@
 
 #include "sudokubox.h"
 
-class sudokuCommand : public QUndoCommand
+class SudokuCommand : public QUndoCommand
 {
 
 public:
-    sudokuCommand(SudokuBox *box, markFlag oldF, markFlag newF);
+    SudokuCommand(SudokuBox *box, markFlag oldF, markFlag newF);
     void undo();
     void redo();
 

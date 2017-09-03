@@ -320,7 +320,7 @@ bool GameArea::makeMarkOn(SudokuBox *box, int number, bool marked) {
     markFlag newF = box->getMarks();
 
     //add in UndoStack.
-    if(result) undoStack->push(new sudokuCommand(box, oldF, newF));
+    if(result) undoStack->push(new SudokuCommand(box, oldF, newF));
 
     return result;
 }
@@ -330,7 +330,7 @@ bool GameArea::setMarkOn(SudokuBox *box, markFlag f) {
     bool result = box->setMarkFlag(f);
 
     //add in UndoStack.
-    if(result) undoStack->push(new sudokuCommand(box, oldF, f));
+    if(result) undoStack->push(new SudokuCommand(box, oldF, f));
 
     return result;
 }

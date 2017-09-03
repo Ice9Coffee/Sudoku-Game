@@ -29,43 +29,50 @@ Project-Week1 in Summer 2017
  connect(numberButtonGroup->button(i),
         static_cast<void (QAbstractButton:: *)(bool checked)>(&QAbstractButton::clicked),
         this, [=](bool checked) { on_numberButton_clicked(i, checked); });
-
  `````
  - QSS：设置背景颜色、高亮颜色等。
  - 新开线程使BGM播放平稳...............................未成功？
 
 
-## 类介绍
+## 主要类介绍
 
 ### GameWindow
+
 游戏的主窗口。负责加载题目、选择关卡。
 
 ### SudokuTable
+
 重写了 void [keyPressEvent]()(QKeyEvent* e) 将按键事件传递给GameArea处理。
 通过在sudokuModel中添加SudokuBox实现游戏的基本界面。
 
 ### BgmThread
+
 播放bgm的线程。
 
+### SudokuCommand
 
+重写了[undo]()()和[redo]()()，配合QUndoStack实现撤销与重做的功能。
 
 ### GameArea
+
 游戏区域。负责SudokuTable、多个控制用Button、以及显示游戏时间。是本项目的核心。
 
 #### 主要函数
+
 | Function Name | Detail |
 | ---- | ---- |
-| bool [makeMarkOn]()(SudokuBox* box, int number, bool marked); | 在box上对number设置/清除标记 |
-| bool [setMarkOn]()(SudokuBox* box, markFlag f); | 将box的标记改为f |
-| bool [clearMark]()(SudokuBox* box); | 清除box中的标记 |
-| void [freshNumberButtons]()(SudokuBox* box); | 将numberButtonGroup的状态与box同步 |
-| void [freshUndoRedoButtons]()(); | 将undoButton与redoButton的状态与当前同步 |
-| void [freshClearButton]()(SudokuBox *box); | 将clearButton的状态与box同步 |
-| void [freshStyle]()(QModelIndex current, int curN, QModelIndex previous, int preN); | 根据previous和current刷新字体、背景颜色 |
-| void [setGameAreaActive]()(bool active); | 将游戏区域激活/休眠 |
+| bool [makeMarkOn]()(SudokuBox* box, int number, bool marked); | 在box上对number设置/清除标记。 |
+| bool [setMarkOn]()(SudokuBox* box, markFlag f); | 将box的标记改为f。 |
+| bool [clearMark]()(SudokuBox* box); | 清除box中的标记。 |
+| void [freshNumberButtons]()(SudokuBox* box); | 将numberButtonGroup的状态与box同步。 |
+| void [freshUndoRedoButtons]()(); | 将undoButton与redoButton的状态与当前同步。 |
+| void [freshClearButton]()(SudokuBox *box); | 将clearButton的状态与box同步。 |
+| void [freshStyle]()(QModelIndex current, int curN, QModelIndex previous, int preN); | 根据previous和current刷新字体、背景颜色等。 |
+| void [setGameAreaActive]()(bool active); | 将游戏区域激活/休眠。 |
 
 
 #### Buttons
+
 | Button(Group) Name | Button Function | Short Cut
 | ---- | ---- | ---- |
 | numberButtonGroup | 填入/清除相应数字 | 1 ~ 9 |
@@ -78,14 +85,18 @@ Project-Week1 in Summer 2017
 | commitButton | 检查是否完成、是否正确解决了题目 | (No Short Cut) |
 
 #### 关于游戏时间记录 与 暂停功能
+
+暂停时会将游戏区域禁用、暂停计时，并遮挡游戏画面。
+
 | 控件 | Function |
 | ---- | ---- |
-| timeLCD | 显示时间 |
-| QDateTime* gameTime | 记录时间 |
-| QTimer *timer | 每秒触发timeout()，更新时间 |
-| QImage *pauseImg | 暂停时遮挡游戏画面 |
+| timeLCD | 显示时间。 |
+| QDateTime* gameTime | 记录时间。 |
+| QTimer *timer | 每秒触发timeout()，更新时间。 |
+| QImage *pauseImg | 暂停时遮挡游戏画面。 |
 
 ### markFlag
+
 一个封装好的struct。通过位运算记录某格的标记状态。
 
 ### SudokuBox
@@ -103,21 +114,21 @@ Project-Week1 in Summer 2017
 | Function Name | Detail |
 | ---- | ---- |
 | int [getNumber]()() const; | return number. |
-| markFlag getMarks() const; | return mark. |
-| bool isEditable() const; | return editable. |
-| int countMarks() const; | return 标记的个数. |
-| bool setMark(int n, bool marked); | 将数字n标记为marked。 |
-| bool setMarkFlag(markFlag f); | 将mark设置为f |
-| bool clearMarks(); | 清空mark |
+| markFlag [getMarks]()() const; | return mark. |
+| bool [isEditable]()() const; | return editable. |
+| int [countMarks]()() const; | return 标记的个数. |
+| bool [setMark]()(int n, bool marked); | 将数字n标记为marked。 |
+| bool [setMarkFlag]()(markFlag f); | 将mark设置为f |
+| bool [clearMarks]()(); | 清空mark |
 
 #### Signals
 | Signal Name | Detail |
 | ---- | ---- |
-| void numberChanged(); | emit when number changed. |
-| void markChanged(); | emit when mark changed. |
+| void [numberChanged]()(); | emit when number changed. |
+| void [markChanged]()(); | emit when mark changed. |
 
 #### Private Slots
 | Slot Name | Detail |
 | ---- | ---- |
-| void on_numberChanged(); | 更新mLabel的状态 |
-| void on_numberChanged(); | 更新sLabels的状态 |
+| void [on_numberChanged]()(); | 更新mLabel的状态 |
+| void [on_numberChanged]()(); | 更新sLabels的状态 |
