@@ -2,7 +2,11 @@
     <qresource prefix="/pic">
         <file alias="pausePic">pictures/Chino.jpg</file>
     </qresource>
-    <qresource prefix="/SE"/>
+    <qresource prefix="/SE">
+        <file alias="hint">SE/131348__kaonaya__bell-at-daitokuji-temple-kyoto.wav</file>
+        <file alias="win">SE/270402__littlerobotsoundfactory__jingle-win-00.wav</file>
+        <file alias="number">SE/367217__daalvinz__bubble-pop.wav</file>
+    </qresource>
     <qresource prefix="/stylesheet">
         <file alias="dark">stylesheet/dark.css</file>
         <file alias="normalBox1">stylesheet/normalBox1.css</file>
@@ -15,5 +19,8 @@
     </qresource>
     <qresource prefix="/puzzles">
         <file alias="default">data/puzzles.txt</file>
+    </qresource>
+    <qresource prefix="/bgm">
+        <file alias="bgm1">bgm/Wind from the Far East.wav</file>
     </qresource>
 </RCC>

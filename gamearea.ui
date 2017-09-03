@@ -186,7 +186,7 @@
    <item>
     <layout class="QVBoxLayout" name="gameLayout">
      <item>
-      <widget class="QTableView" name="sudokuTable">
+      <widget class="SudokuTable" name="sudokuTable">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -598,6 +598,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>SudokuTable</class>
+   <extends>QTableView</extends>
+   <header>sudokutable.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

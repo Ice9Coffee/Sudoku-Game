@@ -4,7 +4,8 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui\
+            multimedia
 CONFIG   += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -28,12 +29,16 @@ SOURCES += main.cpp\
         gamewindow.cpp \
     gamearea.cpp \
     sudokubox.cpp \
-    sudokucommand.cpp
+    sudokucommand.cpp \
+    sudokutable.cpp \
+    bgmthread.cpp
 
 HEADERS  += gamewindow.h \
     gamearea.h \
     sudokubox.h \
-    sudokucommand.h
+    sudokucommand.h \
+    sudokutable.h \
+    bgmthread.h
 
 FORMS    += gamewindow.ui \
     gamearea.ui \

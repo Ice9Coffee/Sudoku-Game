@@ -3,7 +3,10 @@
 #include "gamearea.h"
 
 #include <QFile>
+#include <QMessageBox>
+
 #include <QDebug>
+
 
 GameWindow::GameWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -43,5 +46,6 @@ GameWindow::~GameWindow()
 }
 
 void GameWindow::loadPuzzle(int lv) {
-    ui->gameArea->loadProblem(p[lv], a[lv]);
+    int re = QMessageBox::warning(this, "Sudoku-Game", "Are you sure to load a new game?", QMessageBox::Yes | QMessageBox::No);
+    if(re == QMessageBox::Yes) ui->gameArea->loadProblem(p[lv], a[lv]);
 }

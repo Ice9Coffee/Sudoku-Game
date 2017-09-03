@@ -15,7 +15,8 @@ GameArea::GameArea(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::GameArea),
     gameTime(new QDateTime(startDate, QTime(0, 0, 0))),
-    hintUsed(0)
+    hintUsed(0),
+    numberSE(this), hintSE(this), winSE(this)
 {
     ui->setupUi(this);
 
@@ -57,7 +58,7 @@ GameArea::GameArea(QWidget *parent) :
     undoAction = undoStack->createUndoAction(this);
     redoAction = undoStack->createRedoAction(this);
 
-    //setStyle....
+    //set Style....
     ui->sudokuTable->setShowGrid(false);
     readQSS(&normalBoxStyle1, ":/stylesheet/normalBox1");
     readQSS(&normalBoxStyle2, ":/stylesheet/normalBox2");
@@ -66,6 +67,14 @@ GameArea::GameArea(QWidget *parent) :
     readQSS(&sameNumBoxStyle, ":/stylesheet/sameNumBox");
     readQSS(&editableTextStyle, ":/stylesheet/editableText");
     readQSS(&uneditableTextStyle, ":/stylesheet/uneditableText");
+
+    //set SE
+    numberSE.setSource(QUrl::fromLocalFile(":/SE/number"));
+    hintSE.setSource(QUrl::fromLocalFile(":/SE/hint"));
+    winSE.setSource(QUrl::fromLocalFile(":/SE/win"));
+
+    auto *th = new BgmThread(":/bgm/bgm1", this);
+    th->start();
 
     //read q
     loadProblem(new QString("000000000000000000000000000000000000000000000000000000000000000000000000000000000"),
@@ -98,6 +107,76 @@ void GameArea::loadProblem(const QString *p, const QString *a) {
         box->setStyleSheet(TEXT_STYLE_MAGIC(box) + BG_STYLE_MAGIC(i, j));
     }
 
+}
+
+void GameArea::keyPressEvent(QKeyEvent *e) {
+    int k = e->key();
+    QModelIndex curId, newId;
+    switch (k) {
+    case Qt::Key_0: case Qt::Key_C:
+        ui->clearButton->click();
+        break;
+    case Qt::Key_1:
+        ui->numberButton1->click();
+        break;
+    case Qt::Key_2:
+        ui->numberButton2->click();
+        break;
+    case Qt::Key_3:
+        ui->numberButton3->click();
+        break;
+    case Qt::Key_4:
+        ui->numberButton4->click();
+        break;
+    case Qt::Key_5:
+        ui->numberButton5->click();
+        break;
+    case Qt::Key_6:
+        ui->numberButton6->click();
+        break;
+    case Qt::Key_7:
+        ui->numberButton7->click();
+        break;
+    case Qt::Key_8:
+        ui->numberButton8->click();
+        break;
+    case Qt::Key_9:
+        ui->numberButton9->click();
+        break;
+    case Qt::Key_H:
+        ui->hintButton->click();
+        break;
+    case Qt::Key_F2:
+        ui->restartButton->click();
+        break;
+    case Qt::Key_Up:
+        curId = ui->sudokuTable->selectionModel()->currentIndex();
+        if(curId.row() - 1 < 0) break;
+        newId = sudokuModel->index(curId.row() - 1, curId.column());
+        ui->sudokuTable->selectionModel()->setCurrentIndex(newId, QItemSelectionModel::Current);
+        break;
+    case Qt::Key_Down:
+        curId = ui->sudokuTable->selectionModel()->currentIndex();
+        if(curId.row() + 1 >= 9) break;
+        newId = sudokuModel->index(curId.row() + 1, curId.column());
+        ui->sudokuTable->selectionModel()->setCurrentIndex(newId, QItemSelectionModel::Current);
+        break;
+    case Qt::Key_Left:
+        curId = ui->sudokuTable->selectionModel()->currentIndex();
+        if(curId.column() - 1 < 0) break;
+        newId = sudokuModel->index(curId.row(), curId.column() - 1);
+        ui->sudokuTable->selectionModel()->setCurrentIndex(newId, QItemSelectionModel::Current);
+        break;
+    case Qt::Key_Right:
+        curId = ui->sudokuTable->selectionModel()->currentIndex();
+        if(curId.column() + 1 >= 9) break;
+        newId = sudokuModel->index(curId.row(), curId.column() + 1);
+        ui->sudokuTable->selectionModel()->setCurrentIndex(newId, QItemSelectionModel::Current);
+        break;
+    default:
+        QWidget::keyPressEvent(e);
+        break;
+    }
 }
 
 void GameArea::freshNumberButtons(SudokuBox *box) {
@@ -262,6 +341,7 @@ void GameArea::on_numberButton_clicked(int num, bool checked) {
         numberButtonGroup->button(num)->setChecked(!checked);
         return;
     }
+    numberSE.play();
     freshUndoRedoButtons();
     freshClearButton(box);
     QModelIndex id = ui->sudokuTable->selectionModel()->currentIndex();
@@ -287,7 +367,6 @@ void GameArea::on_pauseButton_clicked(bool checked) {
         //遮挡棋盘.
         ui->sudokuTable->setVisible(false);
         ui->PausePicture->setVisible(true);
-
 
     } else {
         setGameAreaActive(true);
@@ -348,6 +427,7 @@ void GameArea::on_hintButton_clicked() {
         freshUndoRedoButtons();
         freshClearButton(box);
         freshNumberButtons(box);
+        hintSE.play();
     } else QMessageBox::warning(this, "Sudoku-Game", "You are right in this box!", QMessageBox::Ok);
 }
 
@@ -376,6 +456,7 @@ void GameArea::on_commitButton_clicked() {
             return;
         }
     }
+    winSE.play();
     QMessageBox::information(this, "Sudoku-Game", QString("You Win!\nHint used: %0").arg(hintUsed), QMessageBox::Ok);
     timer->stop();
     setGameAreaActive(false);

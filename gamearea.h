@@ -12,9 +12,13 @@
 #include <QImage>
 #include <QUndoStack>
 #include <QAction>
+#include <QKeyEvent>
+#include <QSoundEffect>
+#include <QMediaPlayer>
 
 #include "sudokubox.h"
 #include "sudokucommand.h"
+#include "bgmthread.h"
 
 namespace Ui {
 class GameArea;
@@ -29,6 +33,9 @@ public:
     ~GameArea();
 
     void loadProblem(const QString* p, const QString* a);
+
+public:
+    void keyPressEvent(QKeyEvent *e);
 
 private slots:
     void on_numberButton_clicked(int num, bool checked);
@@ -61,6 +68,8 @@ private:
     QString normalBoxStyle1, normalBoxStyle2,
             highlightBoxStyle, selectedBoxStyle, sameNumBoxStyle,
             editableTextStyle, uneditableTextStyle;
+
+    QSoundEffect numberSE, hintSE, winSE;
 
     SudokuBox* getBox(QModelIndex id);
     SudokuBox* getCurrentBox();
