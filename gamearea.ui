@@ -45,7 +45,7 @@
           </size>
          </property>
          <property name="text">
-          <string>Restart</string>
+          <string>Restart(F2)</string>
          </property>
         </widget>
        </item>
@@ -86,7 +86,7 @@
           </size>
          </property>
          <property name="text">
-          <string>Pause</string>
+          <string>Pause(&amp;P)</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -133,7 +133,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Undo</string>
+          <string>Undo(&amp;Z)</string>
          </property>
         </widget>
        </item>
@@ -149,7 +149,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Redo</string>
+          <string>Redo(&amp;X)</string>
          </property>
         </widget>
        </item>
@@ -162,7 +162,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Hint</string>
+          <string>Hint(&amp;H)</string>
          </property>
         </widget>
        </item>
@@ -175,7 +175,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Clear</string>
+          <string>Clear(&amp;C)</string>
          </property>
         </widget>
        </item>

@@ -473,9 +473,6 @@ void GameArea::on_commitButton_clicked() {
         }
     }
     winSE.play();
-    QMessageBox::information(this, "Sudoku-Game", QString("You Win!\nHint used: %0").arg(hintUsed), QMessageBox::Ok);
-    timer->stop();
     setGameAreaActive(false);
-    ui->commitButton->setEnabled(false);
-    ui->pauseButton->setEnabled(false);
+    QMessageBox::information(this, "Sudoku-Game", QString("You Win!\nHint used: %0").arg(hintUsed), QMessageBox::Ok);
 }

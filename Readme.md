@@ -1,7 +1,25 @@
-# Sudoku-Game
+# [Sudoku-Game]
 Project-Week1 in Summer 2017
 
 *所用音效、音乐、图片素材均来源于网络，版权归原作者所有，侵删。*
+
+## 预览
+
+### Menu
+
+![](preview/Menu.png)
+
+### Start a random game
+
+![](preview/RandomGame.png)
+
+### Interface
+
+![](preview/Interface.png)
+
+### Winner, winner, chicken dinner!
+
+![](preview/Win.png)
 
 ## 基本功能实现
 
@@ -17,7 +35,7 @@ Project-Week1 in Summer 2017
 
 ## 特色功能拓展
 
- - [数独生成器]()
+ - 数独题目生成器
  - 为功能按钮设置了**Shortcut**供使用
  - 可通过键盘**数字键**填数、可通过**方向键**在网格内导航
  - 显示**暂停画面**遮挡题目
@@ -37,7 +55,7 @@ Project-Week1 in Summer 2017
  ```
 
  - QSS：设置背景颜色、高亮颜色等。
- - 新开线程使BGM播放平稳...............................未成功？
+ - 新开线程使BGM播放平稳(效果不佳)
 
 
 ## 主要类介绍
@@ -138,3 +156,27 @@ Project-Week1 in Summer 2017
 | :---- | :---- |
 | void [on_numberChanged]()(); | 更新mLabel的状态 |
 | void [on_numberChanged]()(); | 更新sLabels的状态 |
+
+### SudokuGenerator
+
+- 数独题目生成器。
+- 将一个合法的种子数独随机进行以下若干次变换以生成新数独：
+    - 交换floor
+    - 交换tower
+    - 同floor内交换row
+    - 同tower内交换column
+    - 转置
+- 容易证明经上述变换的仍然合法。
+- 在新数独中随机挖空生成题目。
+
+## 心路历程 & Acknowledgement
+
+- 关于主界面设计。一开始设计界面时本想用81个QPushButton实现数独的主界面，和dalao交流后发现自己太naive了。然后滚去查QTableView和QTableWidget的文档，花费了很长时间搞清楚Qt的Model/View/Delegate的模式。却发现和自己想要实现的功能（同一格内填多个数字、高亮选中的行、列、相同的数字）差距比较大。使用该模式也不便于自定义显示的风格。于是自己手撸了一个SudokuBox : public QWidget强行往TableView里面塞。虽然不太优雅，但总算实现了功能。
+- 关于高亮。使用了QSS实现。但由于往QTableView中添加Item时，Item自身的背景颜色会被QTableView的设置覆盖（折腾了很久才发现直接对我写的QWidget设置背景颜色一点作用也没有），所剩的开发时间也不多，于是乎在SudokuBox的最底层放了一个QLabel bg用于设置背景颜色（这很暴力）。不过还是有一点瑕疵：点击格子时会卡顿一下下...虽然不是很长...现在回头来看应该有更好的实现方法。
+- 关于数独生成器。参考了8.29课上同学介绍的论文中的方法。在此表示感谢。
+- 关于SE & BGM。游戏的卡顿会影响到BGM，虽然新开了一个线程播放，但好像效果并不是很好。SE使用了[freesound](http://freesound.org/)上的免费资源。BGM使用了LaTale的*Wind from the Far East*
+
+ *~~我为什么要写这个玩意~~*
+
+
+ [Sudoku-Game]: <https://github.com/Ice-Cirno/Sudoku-Game>
